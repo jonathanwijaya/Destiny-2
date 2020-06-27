@@ -1,13 +1,16 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createBottomTabNavigator, createMaterialTopTabNavigator, BottomTabBar } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { Image, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { connect } from 'react-redux';
 
 import defaultStyles from './styles/defaultStyles';
 
 import HomeTabContainer from './components/Home/homeContainer';
+import ClanTabContainer from './components/Clan/clanContainer';
 
 import {
   setCustomView,
@@ -33,6 +36,18 @@ const customTextInput = {
 setCustomText(customTextProps);
 setCustomTextInput(customTextInput);
 
+const getTabBarIcon = (navigation, focused, tintColor) => {
+  const { routeName } = navigation.state;
+  let IconComponent = MaterialCommunityIcons;
+  let iconName;
+  if (routeName === 'HomeTab') {
+    iconName = focused ? 'home' : 'home-outline';
+  } else if (routeName === 'ClanTab') {
+    iconName = focused ? 'credit-card' : 'credit-card-plus';
+  } 
+  return <IconComponent name={iconName} size={25} color={tintColor} />;
+};
+
 const HomeStack = createStackNavigator({
   HomeTabContainer: {
     screen: HomeTabContainer,
@@ -43,15 +58,62 @@ const HomeStack = createStackNavigator({
         source={require('../assets/img/destiny-logo-destiny-review-morbid-play-12.png')} />),
       headerTitleAlign: 'center',
       headerStyle: {
-        backgroundColor: '#000000'
+        backgroundColor: '#303030'
       }
     },
   },
 },
 )
 
+const ClanStack = createStackNavigator({
+  ClanStackContainer: {
+    screen: ClanTabContainer,
+    navigationOptions: {
+      headerTitle: () => (<Image
+        style={defaultStyles.navLogo}
+        resizeMode='contain'
+        source={require('../assets/img/destiny-logo-destiny-review-morbid-play-12.png')} />),
+      headerTitleAlign: 'center',
+      headerStyle: {
+        backgroundColor: '#303030'
+      }
+    },
+  },
+},
+)
+
+const TabsNavigator = createBottomTabNavigator({
+  HomeTab: {
+    screen: HomeStack,
+    navigationOptions: {
+      tabBarLabel: 'HOME',
+    },
+  },
+  ClanTab: {
+    screen: ClanStack,
+    navigationOptions: {
+      tabBarLabel: 'CLAN',
+    }
+  },
+},
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, tintColor }) =>
+        getTabBarIcon(navigation, focused, tintColor),
+    }),
+    tabBarOptions: {
+      activeTintColor: '#fafafa',
+      inactiveTintColor: 'grey',
+      // activeBackgroundColor: '#000000',
+      style: {
+        backgroundColor: '#303030'
+      },
+    },
+  }
+);
+
 const AppNavigator = createSwitchNavigator({
-  app: HomeStack
+  app: TabsNavigator
 }, {
   initialRouteName: 'app'
 })

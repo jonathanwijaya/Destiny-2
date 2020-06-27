@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,9 @@ import {
   Button,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+  ImageBackground,
+  Dimensions
 } from 'react-native';
 import {
   TextField,
@@ -44,11 +46,14 @@ export default class Home extends Component {
     console.log(this.props);
     return (
       <View style={styles.container}>
+        <ImageBackground source={require('../../../assets/img/background.jpg')} style={styles.background}/>
         <ScrollView>
-        <View style={styles.margin}>
+        <View style={styles.wrapper}>
           <TextInput
             placeholder="Search D E S T I N Y 2 Player"
-            style={{flex: 1}}
+            placeholderTextColor="#fafafa"
+            underlineColorAndroid="#fafafa"
+            style={styles.textInput}
             value={this.state.displayName}
             onChangeText={(e) =>
               this.setState({
@@ -63,10 +68,6 @@ export default class Home extends Component {
                 value: '3',
               },
               {
-                label: <FontAwesome color="#fafafa" size={25} name="steam" />,
-                value: '5',
-              },
-              {
                 label: (
                   <FontAwesome color="#fafafa" size={25} name="playstation" />
                 ),
@@ -74,28 +75,32 @@ export default class Home extends Component {
               },
               {
                 label: <FontAwesome color="#fafafa" size={25} name="xbox" />,
-                value: '-1',
+                value: '1',
               },
               {
-                label: <Text style={{color: '#fafafa'}}>ALL</Text>,
+                label: <Text style={{ color: '#fafafa' }}>ALL</Text>,
                 value: '-1',
               },
             ]}
             defaultIndex={0}
-            containerStyle={{height: 40}}
+            containerStyle={{ height: 40 }}
             itemStyle={{
-              backgroundColor: '#303030',
+              backgroundColor: '#000000',
               alignItems: 'center',
               flex: 1,
             }}
-            arrowStyle={{marginLeft: 10}}
+            arrowStyle={{ marginLeft: 10 }}
+            arrowColor="#fafafa"
             onChangeItem={(item) =>
               this.setState({
                 memberShiptype: item.value,
               })
             }
             style={{
-              backgroundColor: '#303030',
+              backgroundColor: '#000000',
+            }}
+            dropDownStyle={{
+              backgroundColor: '#000000',
             }}
           />
         </View>
@@ -103,7 +108,7 @@ export default class Home extends Component {
           <TouchableOpacity
             style={styles.touchableOpacity}
             onPress={() => this.search()}>
-            <Text style={{color: '#fafafa', margin: 10}}>S E A R C H</Text>
+            <Text style={{ color: '#fafafa', margin: 10 }}>S E A R C H</Text>
           </TouchableOpacity>
         </View>
         {this.props.home.userProfile &&
@@ -111,7 +116,6 @@ export default class Home extends Component {
             var icon = userprofile
               ? `https://www.bungie.net${userprofile.iconPath}`
               : '../../../assets/img/stadia.svg';
-              console.log("" + icon)
             return (
               <View
                 style={{
@@ -123,17 +127,17 @@ export default class Home extends Component {
                 }}
                 key={i}>
                 <Image
-                style={{
-                  width:50,
-                  height:50
-                }}
+                  style={{
+                    width: 50,
+                    height: 50
+                  }}
                   source={{
                     uri: `${icon}`
                   }}
                 />
                 <Text>
                   {userprofile.displayName}
-                {" "}
+                  {" "}
                 </Text>
                 <Text>
                   {userprofile.membershipId}
@@ -149,19 +153,35 @@ export default class Home extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#B0B0B0',
+    flex:1,
+    // justifyContent:'center'
   },
-  margin: {
+  background: {
+    resizeMode: "cover",
+    justifyContent: "center",
+    height: "100%",
+    width: "100%",
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  wrapper: {
     marginHorizontal: 10,
     marginTop: 10,
     flexDirection: 'row',
   },
   searchButtonWrapper: {
-    backgroundColor: '#303030',
+    backgroundColor: '#000000',
     margin: 5,
   },
   touchableOpacity: {
     alignItems: 'center',
   },
+  textInput: {
+    flex: 1,
+    color: '#fafafa'
+  }
 });
